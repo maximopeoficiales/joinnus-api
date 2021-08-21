@@ -7,7 +7,7 @@ import { Event, EventData, EventsResponse } from "../entitys/Events";
 export const searchEvent = async (search: string): Promise<EventsResponse> => {
 
     let joinnusSearch: JoinnusSearch = {
-        text: search,
+        text: "",
         maps: false,
         filters: {
             price: {
@@ -17,7 +17,7 @@ export const searchEvent = async (search: string): Promise<EventsResponse> => {
             categories: [],
             dates: {
                 key: "all",
-                dateStart: "2021-08-17T08:12:24",
+                dateStart: "2021-08-17T08:45:21",
                 dateEnd: "2021-08-17T23:59:00"
             },
             location: {
@@ -34,6 +34,7 @@ export const searchEvent = async (search: string): Promise<EventsResponse> => {
     joinnusSearch.text = search;
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+
     let raw = JSON.stringify(joinnusSearch);
     let requestOptions: RequestInit = {
         method: 'POST',
