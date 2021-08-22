@@ -10,6 +10,9 @@ export class JoinnusSearch {
     public start: number;
     public limit: number;
     public country: string;
+    public minPrice: number;
+    public maxPrice: number;
+
     constructor() {
         this.setDefault();
     }
@@ -62,6 +65,16 @@ export class JoinnusSearch {
     }
     setCountry(country: string) {
         this.country = country;
+        return this;
+    }
+
+    setMaxPrice(maxPrice: number) {
+        this.maxPrice = maxPrice;
+        return this;
+    }
+
+    setMinPrice(minPrice: number) {
+        this.minPrice = minPrice;
         return this;
     }
 

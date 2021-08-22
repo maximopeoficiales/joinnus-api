@@ -28,6 +28,16 @@ export const searchEvent = async (searchFilter: JoinnusSearch): Promise<EventsRe
         transformData.data.events = transformData.data.events.slice(0, searchFilter.limit);
     }
 
+    // if (transformData.data.events.length > 0) {
+    //     transformData.data.events = transformData.data.events.map(e => {
+    //         if (searchFilter.maxPrice) {
+
+    //         }
+    //         return e;
+    //     });
+    // }
+
+
     return transformData;
 }
 
