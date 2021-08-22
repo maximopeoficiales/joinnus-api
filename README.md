@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://www.up.edu.pe/UP_Landing/lima-fintech-forum-2017/img/logo-joinus.png" width="320" alt="Joinnus Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="https://e.rpp-noticias.io/normal/2017/10/27/292429_509507.png" width="320" alt="Joinnus Logo" /></a>
 </p>
 
   <p align="center">Unofficial Joinnus API developed by <b>MaximoProg</b></p>

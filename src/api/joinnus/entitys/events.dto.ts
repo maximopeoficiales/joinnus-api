@@ -1,4 +1,4 @@
-import { Date, Geolocation, Images, JoinnusData, Organizer, Pricing } from "../interfaces/JoinnusResponse";
+import { Date, Geolocation, Pricing } from "../interfaces/joinnusResponse.entity";
 
 export class EventsResponse {
     status: boolean;

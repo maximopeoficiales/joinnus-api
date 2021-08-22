@@ -1,41 +1,16 @@
-import { Categories, JoinnusSearch } from "../interfaces/Joinnus";
-import { JoinnusResponse } from "../interfaces/JoinnusResponse";
+import { Categories } from "../entitys/joinnus.dto";
+import { JoinnusResponse } from "../interfaces/joinnusResponse.entity";
 import config from "../../../config";
 import fetch, { Headers, RequestInit } from 'node-fetch';
-import { Event, EventData, EventsResponse } from "../entitys/Events";
+import { Event, EventData, EventsResponse } from "../entitys/events.dto";
+import { JoinnusSearch } from "../JoinnusSearch";
 
-export const searchEvent = async (search: string): Promise<EventsResponse> => {
+export const searchEvent = async (searchFilter: JoinnusSearch): Promise<EventsResponse> => {
 
-    let joinnusSearch: JoinnusSearch = {
-        text: "",
-        maps: false,
-        filters: {
-            price: {
-                min: "",
-                max: ""
-            },
-            categories: [],
-            dates: {
-                key: "all",
-                dateStart: "2021-08-17T08:45:21",
-                dateEnd: "2021-08-17T23:59:00"
-            },
-            location: {
-                z: 12,
-                center: {
-                    lat: -12.074317294768308,
-                    lng: -77.04348643769534
-                }
-            }
-        },
-        page: 1,
-        country: "PE"
-    };
-    joinnusSearch.text = search;
+
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
-    let raw = JSON.stringify(joinnusSearch);
+    let raw = JSON.stringify(searchFilter);
     let requestOptions: RequestInit = {
         method: 'POST',
         headers: myHeaders,
@@ -43,14 +18,23 @@ export const searchEvent = async (search: string): Promise<EventsResponse> => {
         redirect: 'follow'
     };
     let data: JoinnusResponse = await (await fetch(config.URL_API, requestOptions)).json();
-    return transformEvent(data);
+
+    let transformData = transformEvent(data);
+
+    if (searchFilter.start) {
+        transformData.data.events = transformData.data.events.slice(searchFilter.start, transformData.data.events.length);
+    }
+    if (searchFilter.limit) {
+        transformData.data.events = transformData.data.events.slice(0, searchFilter.limit);
+    }
+
+    return transformData;
 }
 
 export const transformEvent = (dataResponse: JoinnusResponse): EventsResponse => {
     let eventResponse = new EventsResponse();
     const { data } = dataResponse;
     const { currentPage, firstPage, lastPage, perPage, nextPage, prevPage, total, hits } = data;
-    console.log(dataResponse.data.currentPage);
     eventResponse.status = dataResponse.status;
     eventResponse.data = new EventData();
     eventResponse.data.currentPage = currentPage;

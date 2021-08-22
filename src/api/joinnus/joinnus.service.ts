@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { EventsResponse } from './entitys/Events';
-import { searchEvent } from './helpers/functions';
-import { JoinnusResponse } from './interfaces/JoinnusResponse';
+import { EventsResponse } from './entitys/events.dto';
+import { searchEvent } from './utils/functions';
+import { JoinnusSearch } from './JoinnusSearch';
 
 @Injectable()
 export class JoinnusService {
-
-  findAll() {
-    return `This action returns all joinnus`;
+  constructor(private readonly search: JoinnusSearch) { }
+  async findAll(start?: number, limit?: number, page?: number) {
+    return await searchEvent(this.search.setPage(page).setStart(start).setLimit(limit));
   }
 
   async findQuery(query: string): Promise<EventsResponse> {
-    return await searchEvent(query);
+    return await searchEvent(this.search.setSearch(query));
   }
 
 }

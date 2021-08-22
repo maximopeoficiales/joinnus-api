@@ -19,17 +19,14 @@ export enum Categories {
     SERVICIO_COMUNITARIO = "community-service",
     CINE = "cine"
 }
-
-export interface JoinnusFilter {
-    price: { min: string, max: string };
-    categories: Categories[];
-    dates: { key: string, dateStart: string, dateEnd: string }
-    location: { z: number, center: { lat: number, lng: number } }
+export class Today {
+    constructor(public key: string, public dateStart: string, public dateEnd: string,) { }
 }
-export interface JoinnusSearch {
-    text: string;
-    maps: boolean;
-    filters: JoinnusFilter;
-    page: number;
-    country: string;
+export class Price { constructor(min: string, max: string) { } }
+export class Location { constructor(public z: number, public center: { lat: number, lng: number }) { } }
+export class JoinnusFilter {
+    constructor(public price: Price,
+        public categories: Categories[],
+        public dates: Today,
+        public location: Location) { }
 }

@@ -1,6 +1,7 @@
+import { Query } from '@nestjs/common';
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { EventsResponse } from './entitys/Events';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { EventsResponse } from './entitys/events.dto';
 import { JoinnusService } from './joinnus.service';
 
 @ApiTags("Joinnus")
@@ -8,9 +9,15 @@ import { JoinnusService } from './joinnus.service';
 export class JoinnusController {
   constructor(private readonly joinnusService: JoinnusService) { }
 
+  @ApiResponse({
+    description: "Return All Events Joinnus", isArray: true, type: EventsResponse
+  })
   @Get()
-  findAll() {
-    return this.joinnusService.findAll();
+  async findAll(
+    @Query("_page") page?: number,
+    @Query("_limit") limit?: number,
+    @Query("_start") start?: number): Promise<EventsResponse> {
+    return this.joinnusService.findAll(start, limit, page);
   }
 
   @Get('search/:query')
@@ -18,4 +25,8 @@ export class JoinnusController {
     return await this.joinnusService.findQuery(query);
   }
 
+  @Get('category/:category')
+  async findByCategory(@Param('category') category: string): Promise<EventsResponse> {
+    return await this.joinnusService.findQuery(category);
+  }
 }
