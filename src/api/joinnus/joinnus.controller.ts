@@ -1,9 +1,10 @@
 import { ParseIntPipe } from '@nestjs/common';
 import { ParseFloatPipe, Query } from '@nestjs/common';
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseNumberPipe } from 'src/pipes/parseNumber.pipe';
 import { EventsResponse } from './entitys/events.dto';
+import { Categories } from './entitys/joinnus.dto';
 import { JoinnusService } from './joinnus.service';
 
 @ApiTags("Joinnus")
@@ -33,13 +34,38 @@ export class JoinnusController {
     return this.joinnusService.findAll({ start, limit, page, minPrice, maxPrice });
   }
 
+  @ApiQuery({ name: "_page", required: false, type: Number })
+  @ApiQuery({ name: "_limit", required: false, type: Number })
+  @ApiQuery({ name: "_start", required: false, type: Number })
+  @ApiQuery({ name: "_minPrice", required: false, type: Number })
+  @ApiQuery({ name: "_maxPrice", required: false, type: Number })
+  @ApiParam({ name: "query", required: true, type: String })
   @Get('search/:query')
-  async findOne(@Param('query') query: string): Promise<EventsResponse> {
-    return await this.joinnusService.findQuery(query);
+  async findOne(
+    @Param('query') query: string,
+    @Query("_page", ParseNumberPipe) page?: number,
+    @Query("_limit", ParseNumberPipe) limit?: number,
+    @Query("_start", ParseNumberPipe) start?: number,
+    @Query("_minPrice", ParseNumberPipe) minPrice?: number,
+    @Query("_maxPrice", ParseNumberPipe) maxPrice?: number
+  ): Promise<EventsResponse> {
+    return await this.joinnusService.findQuery({ start, limit, page, minPrice, maxPrice }, query);
   }
 
+  @ApiQuery({ name: "_page", required: false, type: Number })
+  @ApiQuery({ name: "_limit", required: false, type: Number })
+  @ApiQuery({ name: "_start", required: false, type: Number })
+  @ApiQuery({ name: "_minPrice", required: false, type: Number })
+  @ApiQuery({ name: "_maxPrice", required: false, type: Number })
+  @ApiParam({ name: "category", required: true, enum: Categories })
   @Get('category/:category')
-  async findByCategory(@Param('category') category: string): Promise<EventsResponse> {
-    return await this.joinnusService.findQuery(category);
+  async findByCategory(
+    @Param('category') category: Categories,
+    @Query("_page", ParseNumberPipe) page?: number,
+    @Query("_limit", ParseNumberPipe) limit?: number,
+    @Query("_start", ParseNumberPipe) start?: number,
+    @Query("_minPrice", ParseNumberPipe) minPrice?: number,
+    @Query("_maxPrice", ParseNumberPipe) maxPrice?: number): Promise<EventsResponse> {
+    return await this.joinnusService.findByCategory({ start, limit, page, minPrice, maxPrice }, category);
   }
 }
