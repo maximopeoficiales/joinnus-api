@@ -1,7 +1,8 @@
+.env
+data.json
 # compiled output
 /dist
 /node_modules
-data.json
 # Logs
 logs
 *.log

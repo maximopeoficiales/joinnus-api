@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { RouterApiModule } from './routers/api.router.module';
+import { ConfigModule } from './config/config.module';
 
 @Module({
-  imports: [RouterApiModule],
+  imports: [RouterApiModule, ConfigModule],
   controllers: [],
   providers: [],
 })
