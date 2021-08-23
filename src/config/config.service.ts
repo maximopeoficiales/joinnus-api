@@ -4,7 +4,8 @@ import { parse } from 'dotenv';
 
 @Injectable()
 export class ConfigService {
-    constructor(private readonly envConfig: { [key: string]: string }) {
+    private readonly envConfig: { [key: string]: string }
+    constructor() {
         const isDevEnv = process.env.NODE_ENV !== 'production';
 
         if (isDevEnv) {
