@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { EventsResponse } from './entitys/events.dto';
-import { searchEvent } from './utils/functions';
+import { searchEvents } from './utils/searchEvents';
 import { JoinnusSearch } from './JoinnusSearch';
-import { QueryFilter } from './interfaces/queryFilter';
+import { QueryFilter } from './interfaces/queryFilter.entity';
 import { Categories } from './entitys/joinnus.dto';
+import { getEventBySlugId } from './utils/webscrapping';
+import { JoinnusResponsePage } from './interfaces/joinnusResponsePage.entity';
+import { EventPage } from './entitys/eventPage.dto';
 
 @Injectable()
 export class JoinnusService {
@@ -14,7 +17,7 @@ export class JoinnusService {
     let filter = this.search.setPage(page).setStart(start).setLimit(limit)
       .setMaxPrice(maxPrice).setMinPrice(minPrice);
 
-    return await searchEvent(filter);
+    return await searchEvents(filter);
   }
 
   async findQuery(queryFilter: QueryFilter, query: string): Promise<EventsResponse> {
@@ -23,7 +26,7 @@ export class JoinnusService {
     let filter = this.search.setPage(page).setStart(start).setLimit(limit)
       .setMaxPrice(maxPrice).setMinPrice(minPrice).setSearch(query);
 
-    return await searchEvent(filter);
+    return await searchEvents(filter);
   }
 
   async findByCategory(queryFilter: QueryFilter, category: Categories): Promise<EventsResponse> {
@@ -32,7 +35,11 @@ export class JoinnusService {
     let filter = this.search.setPage(page).setStart(start).setLimit(limit)
       .setMaxPrice(maxPrice).setMinPrice(minPrice).setCategorie(category);
 
-    return await searchEvent(filter);
+    return await searchEvents(filter);
   }
 
+
+  async findBySlugId(slugId: string): Promise<EventPage> {
+    return await getEventBySlugId(slugId);
+  }
 }

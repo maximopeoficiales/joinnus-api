@@ -3,8 +3,10 @@ import { ParseFloatPipe, Query } from '@nestjs/common';
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseNumberPipe } from 'src/pipes/parseNumber.pipe';
+import { EventPage } from './entitys/eventPage.dto';
 import { EventsResponse } from './entitys/events.dto';
 import { Categories } from './entitys/joinnus.dto';
+import { JoinnusResponsePage } from './interfaces/joinnusResponsePage.entity';
 import { JoinnusService } from './joinnus.service';
 
 @ApiTags("Joinnus")
@@ -41,7 +43,7 @@ export class JoinnusController {
   @ApiQuery({ name: "_maxPrice", required: false, type: Number })
   @ApiParam({ name: "query", required: true, type: String })
   @Get('search/:query')
-  async findOne(
+  async search(
     @Param('query') query: string,
     @Query("_page", ParseNumberPipe) page?: number,
     @Query("_limit", ParseNumberPipe) limit?: number,
@@ -67,5 +69,15 @@ export class JoinnusController {
     @Query("_minPrice", ParseNumberPipe) minPrice?: number,
     @Query("_maxPrice", ParseNumberPipe) maxPrice?: number): Promise<EventsResponse> {
     return await this.joinnusService.findByCategory({ start, limit, page, minPrice, maxPrice }, category);
+  }
+
+  // este el proceso mas tardio porque se conecta con 3 servicios
+  @ApiResponse({
+    description: "Return event by SlugId", type: EventPage
+  })
+  @ApiParam({ name: "slugId", required: true, type: String, description: "Slug of event" })
+  @Get(':slugId')
+  async findBySlugId(@Param('slugId') slugId: string): Promise<EventPage> {
+    return await this.joinnusService.findBySlugId(slugId);
   }
 }

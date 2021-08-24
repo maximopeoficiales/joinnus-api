@@ -5,7 +5,7 @@ import fetch, { Headers, RequestInit } from 'node-fetch';
 import { Event, EventData, EventsResponse } from "../entitys/events.dto";
 import { JoinnusSearch } from "../JoinnusSearch";
 
-export const searchEvent = async (searchFilter: JoinnusSearch): Promise<EventsResponse> => {
+export const searchEvents = async (searchFilter: JoinnusSearch): Promise<EventsResponse> => {
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     let raw = JSON.stringify(searchFilter);
@@ -16,7 +16,7 @@ export const searchEvent = async (searchFilter: JoinnusSearch): Promise<EventsRe
         redirect: 'follow'
     };
     let data: JoinnusResponse = await (await fetch(config.URL_API, requestOptions)).json();
-    let transformData = transformEvent(data);
+    let transformData = transformEvents(data);
 
     let { events } = transformData.data;
 
@@ -53,7 +53,7 @@ export const filterMinMaxPrice = (events: Event[], minPrice: number, maxPrice: n
 }
 
 
-export const transformEvent = (dataResponse: JoinnusResponse): EventsResponse => {
+export const transformEvents = (dataResponse: JoinnusResponse): EventsResponse => {
     let eventResponse = new EventsResponse();
     const { data } = dataResponse;
     const { currentPage, firstPage, lastPage, perPage, nextPage, prevPage, total, hits } = data;
@@ -83,6 +83,8 @@ export const transformEvent = (dataResponse: JoinnusResponse): EventsResponse =>
         event.pricing = _source.pricing;
         event.soldOut = _source.soldOut;
         event.state = _source.state;
+        event.slug = _source.url;
+        event.slugId = `${_source.url}-${_source.id}`;
 
         event.url = `${config.URL_EVENTS}/${_source.categorySlug}/${_source.url}-${_source.id}`;
         return event;

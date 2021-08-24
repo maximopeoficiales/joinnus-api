@@ -19,6 +19,8 @@ export class Event {
     id: number;
     title: string;
     url: string;
+    slug: string;
+    slugId: string;
     description: string;
     image: string;
     geolocation: Geolocation;
