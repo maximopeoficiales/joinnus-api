@@ -3,6 +3,7 @@ import { ParseFloatPipe, Query } from '@nestjs/common';
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseNumberPipe } from 'src/pipes/parseNumber.pipe';
+import { EventPagePojo } from './dto/EventPagePojo.dto';
 import { EventPage } from './entitys/eventPage.dto';
 import { EventsResponse } from './entitys/events.dto';
 import { Categories } from './entitys/joinnus.dto';
@@ -73,7 +74,7 @@ export class JoinnusController {
 
   // este el proceso mas tardio porque se conecta con 3 servicios
   @ApiResponse({
-    description: "Return event by SlugId", type: EventPage
+    description: "Return event by SlugId", type: EventPagePojo
   })
   @ApiParam({ name: "slugId", required: true, type: String, description: "Slug of event" })
   @Get(':slugId')
